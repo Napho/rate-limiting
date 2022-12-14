@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+		http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+		http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+		http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+    <changeSet id="20221212_1" author="starnapho@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="m_client" />
+            </not>
+        </preConditions>
+        <createTable tableName="t_client">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" primaryKeyName="PK_t_client"  />
+            </column>
+            <column name="username" type="varchar(250)">
+                <constraints unique="true" uniqueConstraintName="UNQ_t_client_username" />
+            </column>
+            <column name="name" type="varchar(100)"></column>
+            <column name="tps" type="bigint">
+                <constraints nullable="false" notNullConstraintName="NN_tps"/>
+            </column>
+            <column name="tpm" type="bigint">
+                <constraints nullable="false" notNullConstraintName="NN_tpm"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="20221212_2" author="starnapho@gmail.com">
+        <preConditions onFail="MARK_RAN">
+            <sqlCheck expectedResult="0">
+                select count(1) from t_client where username = 'test1';
+            </sqlCheck>
+        </preConditions>
+        <insert tableName="t_client">
+            <column name="username" value="test1"></column>
+            <column name="name" value="App Test 1"></column>
+            <column name="tps" value="10"></column>
+            <column name="tpm" value="20"/>
+        </insert>
+
+        <insert tableName="t_client">
+            <column name="username" value="test2"></column>
+            <column name="name" value="App Test 2"></column>
+            <column name="tps" value="10"></column>
+            <column name="tpm" value="20"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
