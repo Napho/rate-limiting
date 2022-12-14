@@ -1,0 +1,16 @@
+version: '3.7'
+services:
+  cache-server:
+    image: redis:latest
+    ports:
+      - 6379:6379
+  sms-email-service:
+    build: .
+    depends_on:
+      - cache-server
+    ports:
+      - 8080:8080
+    environment:
+      - REDIS_SERVER=redis://cache-server:6379
+      - REDIS_HOST=cache-server
+      - REDIS_PORT=6379
